@@ -1,11 +1,13 @@
 var exec = require('child_process').exec;
 var networkUtils = require('./network-utils');
 var env = require('./env');
+var escapeInputForShell = require('./shell-utils').escapeInputForShell;
 
 function scanWifi(config, callback) {
   var commandStr = "nmcli --terse --fields active,ssid,bssid,mode,chan,freq,signal,security,wpa-flags,rsn-flags device wifi list";
+
   if (config.iface) {
-      commandStr += ' ifname '+config.iface;
+      commandStr += " ifname " + escapeInputForShell(config.iface);
   }
 
   exec(commandStr, env, function(err, scanResults) {

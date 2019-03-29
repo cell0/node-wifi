@@ -1,11 +1,13 @@
 var exec = require('child_process').exec;
 var networkUtils = require('./network-utils');
+var escapeInputForShell = require('./shell-utils').escapeInputForShell;
 var env = require('./env');
 
 function getCurrentConnection(config, callback) {
   var commandStr = "nmcli --terse --fields active,ssid,bssid,mode,chan,freq,signal,security,wpa-flags,rsn-flags,device device wifi";
+
   if (config.iface) {
-      commandStr += ' list ifname '+config.iface;
+      commandStr += ' list ifname ' + escapeInputForShell(config.iface);
   }
 
   exec(commandStr, env, function(err, scanResults) {

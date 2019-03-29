@@ -1,11 +1,12 @@
 var exec = require('child_process').exec;
 var env = require('./env');
+var escapeInputForShell = require('./shell-utils').escapeInputForShell;
 
 function disconnect (config, callback) {
   var commandStr = "nmcli device disconnect" ;
 
   if (config.iface) {
-      commandStr += " " + config.iface;
+      commandStr += " " + escapeInputForShell(config.iface);
   }
   
   exec(commandStr, env, function(err, resp) {

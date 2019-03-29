@@ -1,20 +1,15 @@
 var exec = require('child_process').exec;
 var util = require('util');
+var escapeInputForShell = require('./shell-utils').escapeInputForShell;
 var env = require('./env');
 
-var escapeShell = function (cmd) {
-  return '"' + cmd.replace(/(["\s'$`\\])/g, '\\$1') + '"';
-};
-
 function connectToWifi(config, ap, callback) {
-  var commandStr = "nmcli -w 10 device wifi connect '" + ap.ssid + "'" +
-    " password " + "'" + ap.password + "'";
+  var commandStr = "nmcli -w 10 device wifi connect " + escapeInputForShell(ap.ssid) +
+      " password " + escapeInputForShell(ap.password);
 
   if (config.iface) {
-    commandStr = commandStr + " ifname " + config.iface;
+    commandStr += " ifname " + escapeInputForShell(config.iface);
   }
-
-  // commandStr = escapeShell(commandStr);
 
   exec(commandStr, env, function (err, resp) {
     // Errors from nmcli came from stdout, we test presence of 'Error: ' string

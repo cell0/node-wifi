@@ -1,10 +1,11 @@
 var exec = require('child_process').exec;
 var env = require('./env');
+var escapeInputForShell = require('./shell-utils').escapeInputForShell;
 
 function deleteConnection(config, ap, callback) {
-  var commandStr = "nmcli connection delete id ";
+  var commandStr = "nmcli connection delete id";
 
-  commandStr += " " + "'" + ap.ssid + "'";
+  commandStr += " " + escapeInputForShell(ap.ssid);
 
   exec(commandStr, env, function (err, resp) {
     callback && callback(err);
