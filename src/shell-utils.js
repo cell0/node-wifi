@@ -1,5 +1,5 @@
 var escapeInputForShell = function (input) {
-    return '"' + input.replace(/(["'$`\\])/g, '\\$1') + '"';
+    return `'${input.replace(/'/g, `'\\''`)}'`;
 };
 
 exports.escapeInputForShell = escapeInputForShell;
